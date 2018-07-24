@@ -1,0 +1,91 @@
+body {
+  --dyno-red:#d32f2f;
+  --dyno-black:#212121;
+  --dyno-text-color:#e0e0e0;
+  --transition-time:300ms;
+  --smooth:cubic-bezier(0.250, 0.100, 0.250, 1.000);
+  --menuEasing:var(--smooth);
+  font-family:Arial;
+}
+
+.dyno__stripe {
+  height: 10px;
+  width: 100%;
+  position: fixed;
+  top:0;
+  left:0;
+  background: repeating-linear-gradient( -45deg, var(--dyno-red), var(--dyno-red) 10px, var(--dyno-black) 10px, var(--dyno-black) 20px);
+}
+
+.dyno__dialog {
+  position:fixed;
+  color:var(--dyno-text-color);
+  right:0;
+  top:0;
+  height:75px;
+  background:var(--dyno-black);
+  padding:10px;
+  will-change:transform;
+  border-bottom:2px solid var(--dyno-red);
+  transform: translateY(-87px);
+  transition: transform var(--transition-time) var(--menuEasing);
+}
+
+.dyno__dialog[opened] {
+  transform: translateY(0);
+}
+
+.dyno__dialog h3 {
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.dyno__dialog select {
+  min-width:120px;
+  padding:5px;
+  border-radius:3px;
+  border:1px solid var(--dyno-text-color);
+  background:var(--dyno-text-color);
+}
+
+.dyno__options {
+  width:100%;
+}
+
+.dyno__options label {
+  float:left;
+  padding-top:5px;
+}
+
+.dyno__options select {
+  float:right;
+  cursor:pointer;
+}
+
+.dyno__highlight {
+  border:1px solid var(--dyno-red);
+}
+
+.dyno__handle {
+  position:relative;
+  top:40px;
+  cursor:pointer;
+  width:50px;
+  height:20px;
+  background-color: var(--dyno-black);
+  margin:auto;
+  border-radius:3px;
+  text-align:center;
+  padding-top:6px;
+}
+
+.dyno__handle span {
+  margin:auto;
+  margin-top: 3px;
+  position: relative;
+  border-radius: 3px;
+  display:block;
+  width: 40px;
+  height: 2px;
+  background-color:#CCC;
+}
