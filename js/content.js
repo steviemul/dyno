@@ -121,6 +121,24 @@ const shouldActivate = () => {
   return activate;
 };
 
+const clickHandler = (evt) => {
+
+  if (selectedOption === 'none') {
+    return;
+  } else if (selectedOption === 'buttons' && !BUTTON_TAGS.includes(evt.target.tagName)) {
+    return;
+  }
+
+  if (ALL_ACTION_TAGS.includes(evt.target.tagName)) {
+
+    const answer = confirm("Are you sure you want to perform this action ?");
+
+    if (!answer) {
+      evt.preventDefault();
+    }
+  }
+};
+
 const activate = () => {
   retrieveSettings();
 
@@ -140,23 +158,7 @@ const activate = () => {
   body.appendChild(dialog);
   body.appendChild(stripe);
 
-  body.addEventListener('click', (evt) => {
-
-    if (selectedOption === 'none') {
-      return;
-    } else if (selectedOption === 'buttons' && !BUTTON_TAGS.includes(evt.target.tagName)) {
-      return;
-    }
-
-    if (ALL_ACTION_TAGS.includes(evt.target.tagName)) {
-
-      const answer = confirm("Are you sure you want to perform this action ?");
-
-      if (!answer) {
-        evt.preventDefault();
-      }
-    }
-  });
+  body.addEventListener('click', clickHandler);
 };
 
 const deactivate = () => {
@@ -167,13 +169,15 @@ const deactivate = () => {
 
   body.removeChild(stripe);
   body.removeChild(dialog);
+
+  body.removeEventListener('click', clickHandler);
 };
 
 if (shouldActivate()) {
   activate();
 }
 
-chrome.runtime.sendMessage({query: 'dyno-active'}, function(response) {
+chrome.runtime.sendMessage({query: 'dyno-active', url: url}, function(response) {
   if (response['dyno-active']) {
     activate();
   }
@@ -187,7 +191,7 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
     else {
       deactivate();
     }
-    
+
     sendResponse({acknowledged: true});
   }
 });

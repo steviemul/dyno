@@ -20,6 +20,15 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   }
 });
 
+const encodeProperty = (request, property) => {
+
+  const origin = new URL(request.url).origin;
+
+  const propertyString = [origin, property].join('|');
+
+  return btoa(propertyString);
+};
+
 const sendToTab = (tabId, payload) => {
 
   chrome.tabs.sendMessage(tabId, payload, () => {
@@ -29,10 +38,10 @@ const sendToTab = (tabId, payload) => {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.query === 'dyno-active') {
-    sendResponse({'dyno-active': (localStorage.getItem('dyno-active') === 'true')})
+    sendResponse({'dyno-active': localStorage.getItem(encodeProperty(request, 'dyno-active')) === 'true'});
   }
   else if(request.action === 'dyno-active') {
-    localStorage.setItem('dyno-active', request.value);
+    localStorage.setItem(encodeProperty(request, 'dyno-active'), request.value);
 
     if (request.tabId) {
       sendToTab(request.tabId, request);
